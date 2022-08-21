@@ -40,6 +40,8 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProductsByCategory(String category) =>
       _db.collection(collectionProduct).where(productCategory, isEqualTo: category).snapshots();
 
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllFeaturedProducts() =>
+      _db.collection(collectionProduct).where(productFeatured, isEqualTo: true).snapshots();
 
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(String id) =>
       _db.collection(collectionProduct).doc(id).snapshots();
