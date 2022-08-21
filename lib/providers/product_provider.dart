@@ -10,6 +10,7 @@ import '../models/product_model.dart';
 
 class ProductProvider extends ChangeNotifier {
   List<ProductModel> productList = [];
+  List<ProductModel> featuredProductList = [];
   List<CategoryModel> categoryList = [];
   List<String> categoryNameList = [];
 
@@ -26,6 +27,14 @@ class ProductProvider extends ChangeNotifier {
   getAllProducts() {
     DbHelper.getAllProducts().listen((snapshot) {
       productList = List.generate(snapshot.docs.length, (index) =>
+          ProductModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
+  getAllFeaturedProducts() {
+    DbHelper.getAllFeaturedProducts().listen((snapshot) {
+      featuredProductList = List.generate(snapshot.docs.length, (index) =>
           ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
