@@ -1,7 +1,10 @@
 
+import 'package:ecom_user_batch06/models/cart_model.dart';
 import 'package:ecom_user_batch06/models/product_model.dart';
+import 'package:ecom_user_batch06/providers/cart_provider.dart';
 import 'package:ecom_user_batch06/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductItem extends StatefulWidget {
   final ProductModel productModel;
@@ -40,13 +43,31 @@ class _ProductItemState extends State<ProductItem> {
             '$currencySymbol${widget.productModel.salesPrice!}',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          ElevatedButton.icon(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
-            label: const Text('ADD'),
+          Consumer<CartProvider>(
+            builder: (context, provider, child) {
+              final isInCart = provider.isInCart(widget.productModel.id!);
+              return ElevatedButton.icon(
+                icon: Icon(isInCart ? Icons.remove_shopping_cart : Icons.add_shopping_cart),
+                onPressed: () {
+                  if(isInCart) {
+                    provider.removeFromCart(widget.productModel.id!);
+                  } else {
+                    final cartModel = CartModel(
+                      productId: widget.productModel.id!,
+                      productName: widget.productModel.name,
+                      imageUrl: widget.productModel.imageUrl,
+                      salePrice: widget.productModel.salesPrice,
+                    );
+                    provider.addToCart(cartModel);
+                  }
+                },
+                label: Text(isInCart ? 'Remove' : 'ADD'),
+              );
+            },
           )
         ],
       ),
     );
   }
 }
+
