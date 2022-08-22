@@ -1,4 +1,3 @@
-
 import 'package:ecom_user_batch06/models/cart_model.dart';
 import 'package:ecom_user_batch06/models/product_model.dart';
 import 'package:ecom_user_batch06/providers/cart_provider.dart';
@@ -70,4 +69,5 @@ class _ProductItemState extends State<ProductItem> {
     );
   }
 }
+
 

@@ -8,6 +8,7 @@ class DbHelper {
   static const String collectionProduct = 'Products';
   static const String collectionUser = 'Users';
   static const String collectionCart = 'Cart';
+  static const String collectionCities = 'Cities';
   static const String collectionOrderSettings = 'Settings';
   static const String documentOrderConstant = 'OrderConstant';
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -28,6 +29,12 @@ class DbHelper {
           .doc(pid)
           .delete();
 
+  static Future<void> updateCartQuantity(String uid, String pid, num quantity) =>
+      _db.collection(collectionUser).doc(uid)
+          .collection(collectionCart)
+          .doc(pid)
+          .update({cartProductQuantity : quantity});
+
   static Future<bool> doesUserExist(String uid) async {
     final snapshot = await _db.collection(collectionUser)
         .doc(uid).get();
@@ -45,6 +52,9 @@ class DbHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
       _db.collection(collectionCategory).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCities() =>
+      _db.collection(collectionCities).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProduct).snapshots();
@@ -67,8 +77,8 @@ class DbHelper {
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserByUid(String uid) =>
       _db.collection(collectionUser).doc(uid).snapshots();
 
-  static updateProfile(String uid, Map<String, dynamic> map) {
-
+  static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
+    return _db.collection(collectionUser).doc(uid).update(map);
   }
 
 }
