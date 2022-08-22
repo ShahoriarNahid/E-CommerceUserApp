@@ -78,7 +78,9 @@ class DbHelper {
       _db.collection(collectionUser).doc(uid).snapshots();
 
   static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
-    return _db.collection(collectionUser).doc(uid).update(map);
+    return _db.collection(collectionUser)
+        .doc(uid)
+        .update(map);
   }
 
 }

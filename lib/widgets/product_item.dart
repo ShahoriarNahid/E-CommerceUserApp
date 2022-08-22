@@ -39,7 +39,8 @@ class _ProductItemState extends State<ProductItem> {
             ),
           ),
           Text(
-            '$currencySymbol${widget.productModel.salesPrice!}',
+          //  '$currencySymbol${widget.productModel.salesPrice!}',
+            '$currencySymbol${widget.productModel.salesPrice}',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Consumer<CartProvider>(

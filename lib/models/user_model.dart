@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'address_model.dart';
+
 class UserModel {
   String uid;
   String? name;
   String email;
   String? mobile;
   String? image;
+  AddressModel? address;
   Timestamp userCreationTime;
   String? deviceToken;
 
@@ -15,6 +18,7 @@ class UserModel {
         required this.email,
         this.mobile,
         this.image,
+        this.address,
         required this.userCreationTime,
         this.deviceToken});
 
@@ -24,6 +28,7 @@ class UserModel {
       'name' : name,
       'mobile' : mobile,
       'email' : email,
+      'address' : address,
       'image' : image,
       'deviceToken' : deviceToken,
       'userCreationTime' : userCreationTime,
@@ -35,6 +40,7 @@ class UserModel {
     name: map['name'],
     mobile: map['mobile'],
     email: map['email'],
+    address: map['address'],
     image: map['image'],
     deviceToken: map['deviceToken'],
     userCreationTime: map['userCreationTime'],

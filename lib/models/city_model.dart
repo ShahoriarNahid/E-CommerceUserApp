@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CityModel{
+class CityModel {
   String name;
   List<String> area;
 
