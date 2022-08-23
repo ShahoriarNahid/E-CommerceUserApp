@@ -6,9 +6,28 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../db/dbhelper.dart';
+import '../models/city_model.dart';
 import '../models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
+
+  List<CityModel> cityList = [];
+
+  getAllCities() {
+    DbHelper.getAllCities().listen((snapshot) {
+      cityList = List.generate(snapshot.docs.length, (index) =>
+          CityModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
+  List<String> getAreasByCity(String? city) {
+    if(city != null) {
+      return cityList.firstWhere((element) =>
+      element.name == city).area;
+    }
+    return <String>[];
+  }
 
   Future<void> addUser(UserModel userModel) => DbHelper.addUser(userModel);
 
