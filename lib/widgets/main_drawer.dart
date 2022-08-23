@@ -1,6 +1,6 @@
-import 'package:ecom_user_batch06/page/cart_page.dart';
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
+import '../page/cart_page.dart';
 import '../page/launcher_page.dart';
 
 
@@ -44,4 +44,3 @@ class MainDrawer extends StatelessWidget {
     );
   }
 }
-

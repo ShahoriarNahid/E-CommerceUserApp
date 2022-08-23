@@ -17,24 +17,24 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> addToCart(CartModel cartModel) =>
-      DbHelper.addToCart(cartModel, AuthService.user!.uid);
+    DbHelper.addToCart(cartModel, AuthService.user!.uid);
 
   Future<void> removeFromCart(String pid) =>
       DbHelper.removeFromCart(pid, AuthService.user!.uid);
 
   Future<void> _updateCartQuantity(String pid, num quantity) =>
-      DbHelper.updateCartQuantity(AuthService.user!.uid, pid, quantity);
-
+    DbHelper.updateCartQuantity(AuthService.user!.uid, pid, quantity);
+  
   int get totalItemsInCart => cartList.length;
 
   num unitPriceWithQuantity(CartModel cartModel) =>
-      cartModel.salePrice * cartModel.quantity;
+    cartModel.salePrice * cartModel.quantity;
 
-  increaseQuantity(CartModel cartModel) async {
+   increaseQuantity(CartModel cartModel) async {
     await _updateCartQuantity(cartModel.productId!, cartModel.quantity + 1);
   }
 
-  decreaseQuantity(CartModel cartModel) async {
+   decreaseQuantity(CartModel cartModel) async {
     if(cartModel.quantity > 1) {
       await _updateCartQuantity(cartModel.productId!, cartModel.quantity - 1);
     }
@@ -42,11 +42,11 @@ class CartProvider extends ChangeNotifier {
   }
 
   num getCartSubTotal() {
-    num total = 0;
-    for(var cartM in cartList) {
-      total += cartM.salePrice * cartM.quantity;
-    }
-    return total;
+     num total = 0;
+     for(var cartM in cartList) {
+       total += cartM.salePrice * cartM.quantity;
+     }
+     return total;
   }
 
   bool isInCart(String pid) {

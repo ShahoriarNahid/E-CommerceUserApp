@@ -3,6 +3,7 @@ import 'package:ecom_user_batch06/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'checkout_page.dart';
 import 'user_address_page.dart';
 
 class CartPage extends StatelessWidget {
@@ -26,7 +27,7 @@ class CartPage extends StatelessWidget {
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(
-                          cartM.imageUrl!
+                        cartM.imageUrl!
                       ),
                     ),
                     subtitle: Column(
@@ -79,7 +80,7 @@ class CartPage extends StatelessWidget {
                       Text('Subtotal: $currencySymbol${provider.getCartSubTotal()}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                       TextButton(
                         onPressed: provider.totalItemsInCart == 0 ? null
-                            : () => Navigator.pushNamed(context, UserAddressPage.routeName),
+                            : () => Navigator.pushNamed(context, CheckoutPage.routeName),
                         child: const Text('CHECKOUT'),
                       ),
                     ],
@@ -93,4 +94,3 @@ class CartPage extends StatelessWidget {
     );
   }
 }
-

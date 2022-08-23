@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                  //  backgroundColor: Colors.blue.shade900
+                   // backgroundColor: Colors.blue.shade900
                   ),
                   onPressed: () {
                     authenticate();
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
               const Center(child: Text('OR', style: TextStyle(color: Colors.white, fontSize: 18),)),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                //    backgroundColor: Colors.white
+                  //  backgroundColor: Colors.white
                 ),
                 onPressed: () {
                   AuthService.signInWithGoogle().then((credential) async {

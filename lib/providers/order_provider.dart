@@ -22,4 +22,19 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  num getDiscountAmount(num subtotal) {
+    return (subtotal * orderConstantsModel.discount) / 100;
+  }
+
+  num getVatAmount(num subtotal) {
+    final priceAfterDiscount = subtotal - getDiscountAmount(subtotal);
+    return (priceAfterDiscount * orderConstantsModel.vat) / 100;
+  }
+
+  num getGrandTotal(num subtotal) {
+    final priceAfterDiscount = subtotal - getDiscountAmount(subtotal);
+    final vatAmount = getVatAmount(subtotal);
+    return priceAfterDiscount + vatAmount + orderConstantsModel.deliveryCharge;
+  }
+
 }

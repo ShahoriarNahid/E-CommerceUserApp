@@ -46,20 +46,17 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       initialRoute: LauncherPage.routeName,
       routes: {
-    LauncherPage.routeName: (_) => const LauncherPage(),
-    LoginPage.routeName: (_) => const LoginPage(),
-    ProductPage.routeName: (_) => ProductPage(),
-    ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
-    OrderPage.routeName: (_) => const OrderPage(),
-    CartPage.routeName: (_) => CartPage(),
-    PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
-    UserAddressPage.routeName: (_) => UserAddressPage(),
-    CheckoutPage.routeName: (_) =>CheckoutPage(),
-    RegistrationPage.routeName: (_) => RegistrationPage(),
-
-    },
+        LauncherPage.routeName: (_) => const LauncherPage(),
+        LoginPage.routeName: (_) => const LoginPage(),
+        ProductPage.routeName: (_) => ProductPage(),
+        ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
+        OrderPage.routeName: (_) => const OrderPage(),
+        CartPage.routeName: (_) => CartPage(),
+        PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
+        UserAddressPage.routeName: (_) => UserAddressPage(),
+        CheckoutPage.routeName: (_) => CheckoutPage(),
+        RegistrationPage.routeName: (_) => RegistrationPage(),
+      },
     );
   }
 }
-
-

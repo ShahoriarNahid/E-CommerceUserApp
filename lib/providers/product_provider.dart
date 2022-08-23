@@ -39,6 +39,7 @@ class ProductProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
   getAllProductsByCategory(String category) {
     DbHelper.getAllProductsByCategory(category).listen((snapshot) {
       productList = List.generate(snapshot.docs.length, (index) =>
@@ -49,5 +50,6 @@ class ProductProvider extends ChangeNotifier {
 
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(String id) =>
-      DbHelper.getProductById(id);
+    DbHelper.getProductById(id);
+
 }
