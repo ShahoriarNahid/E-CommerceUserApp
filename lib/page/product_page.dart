@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecom_user_batch06/page/cart_page.dart';
 import 'package:ecom_user_batch06/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/product_provider.dart';
+import '../utils/constants.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/product_item.dart';
-
+import 'cart_page.dart';
+import 'product_details_page.dart';
 
 class ProductPage extends StatefulWidget {
   static const String routeName = '/product';
@@ -53,8 +55,8 @@ class _ProductPageState extends State<ProductPage> {
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle
+                        color: Colors.red,
+                        shape: BoxShape.circle
                       ),
                       child: FittedBox(child: Consumer<CartProvider>(
                           builder: (context, value, child) => Text('${value.totalItemsInCart}',))),
@@ -81,7 +83,7 @@ class _ProductPageState extends State<ProductPage> {
                     child: ChoiceChip(
                       labelStyle: TextStyle(
                           color:
-                          chipValue == index ? Colors.white : Colors.black),
+                              chipValue == index ? Colors.white : Colors.black),
                       selectedColor: Theme.of(context).primaryColor,
                       label: Text(catName),
                       selected: chipValue == index,
@@ -130,31 +132,31 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   items: provider.featuredProductList
                       .map((e) => Container(
-                    padding: const EdgeInsets.all(4),
-                    child: Stack(
-                      children: [
-                        FadeInImage.assetNetwork(
-                          fadeInDuration: const Duration(seconds: 2),
-                          fadeInCurve: Curves.bounceInOut,
-                          placeholder: 'images/placeholder.jpg',
-                          image: e.imageUrl!,
-                          width: double.maxFinite,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 50,
-                            color: Colors.black54,
-                            child: Text(e.name!, style: TextStyle(color: Colors.white, fontSize: 18),),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ))
+                            padding: const EdgeInsets.all(4),
+                            child: Stack(
+                              children: [
+                                FadeInImage.assetNetwork(
+                                  fadeInDuration: const Duration(seconds: 2),
+                                  fadeInCurve: Curves.bounceInOut,
+                                  placeholder: 'images/placeholder.jpg',
+                                  image: e.imageUrl!,
+                                  width: double.maxFinite,
+                                  fit: BoxFit.cover,
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 50,
+                                    color: Colors.black54,
+                                    child: Text(e.name!, style: TextStyle(color: Colors.white, fontSize: 18),),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))
                       .toList(),
                 ),
               ),
@@ -162,33 +164,30 @@ class _ProductPageState extends State<ProductPage> {
             const SizedBox(height: 20,),
             provider.productList.isEmpty
                 ? const Center(
-              child: Text(
-                'No item found',
-                style: TextStyle(fontSize: 18),
-              ),
-            )
+                    child: Text(
+                      'No item found',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
                 : Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(8),
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                    childAspectRatio: 0.7),
-                itemCount: provider.productList.length,
-                itemBuilder: (context, index) {
-                  final product = provider.productList[index];
-                  return ProductItem(productModel: product);
-                },
-              ),
-            ),
+                    child: GridView.builder(
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 4,
+                              mainAxisSpacing: 4,
+                              childAspectRatio: 0.7),
+                      itemCount: provider.productList.length,
+                      itemBuilder: (context, index) {
+                        final product = provider.productList[index];
+                        return ProductItem(productModel: product);
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
     );
   }
 }
-
-
-

@@ -14,8 +14,8 @@ class DbHelper {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   static Future<void> addUser(UserModel userModel) =>
-      _db.collection(collectionUser).doc(userModel.uid)
-          .set(userModel.toMap());
+    _db.collection(collectionUser).doc(userModel.uid)
+      .set(userModel.toMap());
 
   static Future<void> addToCart(CartModel cartModel, String uid) =>
       _db.collection(collectionUser).doc(uid)
@@ -80,7 +80,7 @@ class DbHelper {
   static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
     return _db.collection(collectionUser)
         .doc(uid)
-        .update(map);
+        .update({'address' : map});
   }
 
 }

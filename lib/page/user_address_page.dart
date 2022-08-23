@@ -1,9 +1,10 @@
 import 'package:ecom_user_batch06/auth/auth_service.dart';
-import 'package:ecom_user_batch06/models/address_model.dart';
 import 'package:ecom_user_batch06/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
+
+import '../models/address_model.dart';
 
 class UserAddressPage extends StatefulWidget {
   static const String routeName = '/user_address';
@@ -46,8 +47,8 @@ class _UserAddressPageState extends State<UserAddressPage> {
             TextFormField(
               controller: addressController,
               decoration: InputDecoration(
-                  filled: true,
-                  labelText: 'Street Address'
+                filled: true,
+                labelText: 'Street Address'
               ),
               validator: (value) {
 
@@ -55,7 +56,7 @@ class _UserAddressPageState extends State<UserAddressPage> {
             ),
             TextFormField(
               keyboardType: TextInputType.number,
-              controller: addressController,
+              controller: zipCodeController,
               decoration: InputDecoration(
                   filled: true,
                   labelText: 'Zip Code'
@@ -66,10 +67,10 @@ class _UserAddressPageState extends State<UserAddressPage> {
             ),
             const SizedBox(height: 10,),
             DropdownButtonFormField<String>(
-                value: city,
+              value: city,
                 hint: const Text('Select City'),
                 items: userProvider.cityList.map((city) => DropdownMenuItem<String>(
-                  child: Text(city.name),
+                    child: Text(city.name),
                   value: city.name,
                 )).toList(),
                 onChanged: (value) {
@@ -106,19 +107,18 @@ class _UserAddressPageState extends State<UserAddressPage> {
     if(formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Please wait');
       final addressModel = AddressModel(
-          streetAddress: addressController.text,
-          city: city!,
-          area: area!,
-          zipCode: int.parse(zipCodeController.text)
+        streetAddress: addressController.text,
+        city: city!,
+        area: area!,
+        zipCode: int.parse(zipCodeController.text)
       );
       userProvider
           .updateProfile(
           AuthService.user!.uid, addressModel.toMap())
-          .then((value) {
+      .then((value) {
         EasyLoading.dismiss();
         Navigator.pop(context);
       });
     }
   }
 }
-

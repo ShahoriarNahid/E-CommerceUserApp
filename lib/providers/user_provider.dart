@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom_user_batch06/models/city_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../db/dbhelper.dart';
+import '../models/city_model.dart';
 import '../models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
