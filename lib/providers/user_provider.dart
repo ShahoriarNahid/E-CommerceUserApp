@@ -10,7 +10,7 @@ import '../models/city_model.dart';
 import '../models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
-
+  UserModel? userModel;
   List<CityModel> cityList = [];
 
   getAllCities() {

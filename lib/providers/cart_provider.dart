@@ -22,6 +22,9 @@ class CartProvider extends ChangeNotifier {
   Future<void> removeFromCart(String pid) =>
       DbHelper.removeFromCart(pid, AuthService.user!.uid);
 
+  Future<void> clearAllCartItems() =>
+    DbHelper.clearAllCartItems(AuthService.user!.uid, cartList);
+
   Future<void> _updateCartQuantity(String pid, num quantity) =>
     DbHelper.updateCartQuantity(AuthService.user!.uid, pid, quantity);
   
