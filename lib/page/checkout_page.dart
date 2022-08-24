@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_user_batch06/auth/auth_service.dart';
+import 'package:ecom_user_batch06/models/address_model.dart';
 import 'package:ecom_user_batch06/models/user_model.dart';
 import 'package:ecom_user_batch06/providers/cart_provider.dart';
 import 'package:ecom_user_batch06/providers/order_provider.dart';
+import 'package:ecom_user_batch06/providers/product_provider.dart';
 import 'package:ecom_user_batch06/providers/user_provider.dart';
 import 'package:ecom_user_batch06/utils/constants.dart';
+import 'package:ecom_user_batch06/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
+import '../models/date_model.dart';
+import '../models/order_model.dart';
+import 'order_successful_page.dart';
+import 'product_page.dart';
 import 'user_address_page.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -23,11 +31,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late CartProvider cartProvider;
   late OrderProvider orderProvider;
   late UserProvider userProvider;
+  String paymentMethodGroupValue = PaymentMethod.cod;
   @override
   void didChangeDependencies() {
     cartProvider = Provider.of<CartProvider>(context);
     orderProvider = Provider.of<OrderProvider>(context);
-    userProvider = Provider.of<UserProvider>(context);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     orderProvider.getOrderConstants();
     super.didChangeDependencies();
   }
@@ -38,6 +47,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         title: const Text('Checkout'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: ListView(
@@ -114,18 +124,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   builder: (context, snapshot) {
                     if(snapshot.hasData) {
                       final userM = UserModel.fromMap(snapshot.data!.data()!);
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(userM.address == null ? 'No address set yet' :
-                          '${userM.address!.streetAddress} \n'
-                              '${userM.address!.area}, ${userM.address!.city}\n'
-                              '${userM.address!.zipCode}'),
-                          ElevatedButton(
-                            onPressed: () => Navigator.pushNamed(context, UserAddressPage.routeName),
-                            child: const Text('Change'),
+                      userProvider.userModel = userM;
+                      return Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(userM.address == null ? 'No address set yet' :
+                              '${userM.address!.streetAddress} \n'
+                                  '${userM.address!.area}, ${userM.address!.city}\n'
+                                  '${userM.address!.zipCode}'),
+                              ElevatedButton(
+                                onPressed: () => Navigator.pushNamed(context, UserAddressPage.routeName),
+                                child: const Text('Change'),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       );
                     }
                     if(snapshot.hasError) {
@@ -134,11 +151,90 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     return const Text('Fetching user data...');
                   },
                 ),
+                const SizedBox(height: 10,),
+                Text('Payment Method', style: Theme.of(context).textTheme.headline6,),
+                const SizedBox(height: 10,),
+                Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Radio<String>(
+                          value: PaymentMethod.cod,
+                          groupValue: paymentMethodGroupValue,
+                          onChanged: (value) {
+                            setState(() {
+                              paymentMethodGroupValue = value!;
+                            });
+                          },
+                        ),
+                        const Text(PaymentMethod.cod),
+                        const SizedBox(width: 15,),
+                        Radio<String>(
+                          value: PaymentMethod.online,
+                          groupValue: paymentMethodGroupValue,
+                          onChanged: (value) {
+                            setState(() {
+                              paymentMethodGroupValue = value!;
+                            });
+                          },
+                        ),
+                        const Text(PaymentMethod.online),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
+          ),
+          ElevatedButton(
+            onPressed: _saveOrder,
+            child: const Text('Place Order'),
           )
         ],
       ),
     );
+  }
+
+  void _saveOrder() {
+    if(userProvider.userModel?.address == null) {
+      showMsg(context, 'Please provide a delivery address');
+      return;
+    }
+    EasyLoading.show(status: 'Please Wait');
+    final orderModel = OrderModel(
+      userId: AuthService.user!.uid,
+      paymentMethod: paymentMethodGroupValue,
+      orderStatus: OrderStatus.pending,
+      grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
+      deliveryCharge: orderProvider.orderConstantsModel.deliveryCharge,
+      discount: orderProvider.orderConstantsModel.discount,
+      vat: orderProvider.orderConstantsModel.vat,
+      orderDate: DateModel(
+        timestamp: Timestamp.fromDate(DateTime.now()),
+        day: DateTime.now().day,
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+      ),
+      deliveryAddress: AddressModel(
+        streetAddress: userProvider.userModel!.address!.streetAddress,
+        city: userProvider.userModel!.address!.city,
+        area: userProvider.userModel!.address!.area,
+        zipCode: userProvider.userModel!.address!.zipCode,
+      ),
+    );
+    orderProvider.addOrder(orderModel, cartProvider.cartList)
+    .then((_) async {
+      await cartProvider.clearAllCartItems();
+      await Provider.of<ProductProvider>(context, listen: false)
+        .updateCategoryProductCount(cartProvider.cartList);
+      EasyLoading.dismiss();
+      Navigator.pushNamedAndRemoveUntil(
+          context, OrderSuccessfulPage.routeName, ModalRoute.withName(ProductPage.routeName));
+    })
+        .catchError((error) {
+          EasyLoading.dismiss();
+    });
   }
 }

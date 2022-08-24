@@ -2,10 +2,16 @@
 import 'package:flutter/material.dart';
 
 import '../db/dbhelper.dart';
+import '../models/cart_model.dart';
 import '../models/order_constants_model.dart';
+import '../models/order_model.dart';
 
 class OrderProvider extends ChangeNotifier {
   OrderConstantsModel orderConstantsModel = OrderConstantsModel();
+
+  Future<void> addOrder(OrderModel orderModel, List<CartModel> cartList) {
+    return DbHelper.addOrder(orderModel, cartList);
+  }
 
   getOrderConstants() {
     DbHelper.getOrderConstants().listen((event) {

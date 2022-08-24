@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../db/dbhelper.dart';
+import '../models/cart_model.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
 
@@ -51,5 +52,8 @@ class ProductProvider extends ChangeNotifier {
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(String id) =>
     DbHelper.getProductById(id);
+
+  Future<void> updateCategoryProductCount(List<CartModel> cartList) =>
+      DbHelper.updateCategoryProductCount(categoryList, cartList);
 
 }
