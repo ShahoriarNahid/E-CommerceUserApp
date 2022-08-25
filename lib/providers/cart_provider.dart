@@ -22,6 +22,9 @@ class CartProvider extends ChangeNotifier {
   Future<void> removeFromCart(String pid) =>
       DbHelper.removeFromCart(pid, AuthService.user!.uid);
 
+  Future<void> clearAllCartItems() =>
+    DbHelper.clearAllCartItems(AuthService.user!.uid, cartList);
+
   Future<void> _updateCartQuantity(String pid, num quantity) =>
     DbHelper.updateCartQuantity(AuthService.user!.uid, pid, quantity);
   
@@ -31,7 +34,9 @@ class CartProvider extends ChangeNotifier {
     cartModel.salePrice * cartModel.quantity;
 
    increaseQuantity(CartModel cartModel) async {
-    await _updateCartQuantity(cartModel.productId!, cartModel.quantity + 1);
+    if(cartModel.quantity < cartModel.stock) {
+      await _updateCartQuantity(cartModel.productId!, cartModel.quantity + 1);
+    }
   }
 
    decreaseQuantity(CartModel cartModel) async {

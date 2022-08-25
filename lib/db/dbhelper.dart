@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_user_batch06/models/product_model.dart';
+import 'package:ecom_user_batch06/utils/constants.dart';
+
+
 import '../models/cart_model.dart';
+import '../models/category_model.dart';
+import '../models/order_model.dart';
 import '../models/user_model.dart';
 
 class DbHelper {
@@ -8,6 +13,8 @@ class DbHelper {
   static const String collectionProduct = 'Products';
   static const String collectionUser = 'Users';
   static const String collectionCart = 'Cart';
+  static const String collectionOrder = 'Order';
+  static const String collectionOrderDetails = 'OrderDetails';
   static const String collectionCities = 'Cities';
   static const String collectionOrderSettings = 'Settings';
   static const String documentOrderConstant = 'OrderConstant';
@@ -23,11 +30,46 @@ class DbHelper {
           .doc(cartModel.productId)
           .set(cartModel.toMap());
 
+  static Future<void> addOrder(OrderModel orderModel, List<CartModel> cartList) {
+    final wb = _db.batch();
+    final orderDoc = _db.collection(collectionOrder).doc();
+    orderModel.orderId = orderDoc.id;
+    wb.set(orderDoc, orderModel.toMap());
+    for(var cartM in cartList) {
+      final detailsDoc = orderDoc.collection(collectionOrderDetails).doc(cartM.productId);
+      wb.set(detailsDoc, cartM.toMap());
+      final productDoc = _db.collection(collectionProduct).doc(cartM.productId);
+      wb.update(productDoc, {productStock : (cartM.stock - cartM.quantity)});
+    }
+    return wb.commit();
+  }
+
+
   static Future<void> removeFromCart(String pid, String uid) =>
       _db.collection(collectionUser).doc(uid)
           .collection(collectionCart)
           .doc(pid)
           .delete();
+
+  static Future<void> clearAllCartItems(String uid, List<CartModel> cartList) {
+    final wb = _db.batch();
+    final userDoc = _db.collection(collectionUser).doc(uid);
+    for(var cartM in cartList) {
+      final cartDoc = userDoc.collection(collectionCart).doc(cartM.productId);
+      wb.delete(cartDoc);
+    }
+    return wb.commit();
+  }
+
+  static Future<void> updateCategoryProductCount(List<CategoryModel> catList,List<CartModel> cartList) {
+    final wb = _db.batch();
+    for(var cartM in cartList) {
+      final catModel = catList.firstWhere((element) => element.name == cartM.category);
+      final catDoc = _db.collection(collectionCategory).doc(catModel.id);
+      wb.update(catDoc, {categoryProductCount : (catModel.productCount - cartM.quantity)});
+    }
+    return wb.commit();
+  }
 
   static Future<void> updateCartQuantity(String uid, String pid, num quantity) =>
       _db.collection(collectionUser).doc(uid)
@@ -56,8 +98,19 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCities() =>
       _db.collection(collectionCities).snapshots();
 
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
-      _db.collection(collectionProduct).snapshots();
+      _db.collection(collectionProduct)
+          .where(productAvailable, isEqualTo: true)
+          .snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrdersByUser(String uid) =>
+      _db.collection(collectionOrder)
+          .where(orderUserIDKey, isEqualTo: uid)
+          //.orderBy(orderGrandTotalKey, descending: true)
+          .orderBy('$orderDateKey.timestamp', descending: true)
+          //.where(orderStatusKey, isEqualTo: OrderStatus.pending)
+          .snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getCartByUser(String uid) =>
       _db.collection(collectionUser)
@@ -81,6 +134,26 @@ class DbHelper {
     return _db.collection(collectionUser)
         .doc(uid)
         .update({'address' : map});
+  }
+
+
+  static Future<bool> canUserRate(String uid, String pid) async {
+    final snapshot = await _db.collection(collectionOrder)
+        .where(orderUserIDKey, isEqualTo: uid)
+        .where(orderStatusKey, isEqualTo: OrderStatus.delivered)
+        .get();
+    if(snapshot.docs.isEmpty) return false;
+    bool tag = false;
+    for(var doc in snapshot.docs) {
+      final detailsSnapshot = await doc.reference.collection(collectionOrderDetails)
+          .where(cartProductId, isEqualTo: pid)
+          .get();
+      if(detailsSnapshot.docs.isNotEmpty) {
+        tag = true;
+        break;
+      }
+    }
+    return tag;
   }
 
 }

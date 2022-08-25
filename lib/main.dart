@@ -1,6 +1,7 @@
 import 'package:ecom_user_batch06/page/cart_page.dart';
 import 'package:ecom_user_batch06/page/checkout_page.dart';
 import 'package:ecom_user_batch06/page/launcher_page.dart';
+import 'package:ecom_user_batch06/page/order_successful_page.dart';
 import 'package:ecom_user_batch06/page/phone_verification_page.dart';
 import 'package:ecom_user_batch06/page/registration_page.dart';
 import 'package:ecom_user_batch06/page/user_address_page.dart';
@@ -51,11 +52,12 @@ class MyApp extends StatelessWidget {
         ProductPage.routeName: (_) => ProductPage(),
         ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
         OrderPage.routeName: (_) => const OrderPage(),
-        CartPage.routeName: (_) => CartPage(),
         PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
+        RegistrationPage.routeName: (_) => RegistrationPage(),
+        CartPage.routeName: (_) => CartPage(),
         UserAddressPage.routeName: (_) => UserAddressPage(),
         CheckoutPage.routeName: (_) => CheckoutPage(),
-        RegistrationPage.routeName: (_) => RegistrationPage(),
+        OrderSuccessfulPage.routeName: (_) => OrderSuccessfulPage(),
       },
     );
   }

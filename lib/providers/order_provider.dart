@@ -1,11 +1,29 @@
 
 import 'package:flutter/material.dart';
 
+import '../auth/auth_service.dart';
 import '../db/dbhelper.dart';
+import '../models/cart_model.dart';
 import '../models/order_constants_model.dart';
+import '../models/order_model.dart';
 
 class OrderProvider extends ChangeNotifier {
   OrderConstantsModel orderConstantsModel = OrderConstantsModel();
+  List<OrderModel> orderList = [];
+
+  getOrdersByUser() {
+    DbHelper.getAllOrdersByUser(AuthService.user!.uid).listen((snapshot) {
+      orderList = List.generate(snapshot.docs.length, (index) =>
+          OrderModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    }).onError((error) {
+      print(error.toString());
+    });
+  }
+
+  Future<void> addOrder(OrderModel orderModel, List<CartModel> cartList) {
+    return DbHelper.addOrder(orderModel, cartList);
+  }
 
   getOrderConstants() {
     DbHelper.getOrderConstants().listen((event) {

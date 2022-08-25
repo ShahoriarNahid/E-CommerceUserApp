@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecom_user_batch06/providers/cart_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,14 +22,18 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   int? chipValue = 0;
+  bool isFirst = true;
 
   @override
   void didChangeDependencies() {
-    Provider.of<ProductProvider>(context, listen: false).getAllProducts();
-    Provider.of<ProductProvider>(context, listen: false).getAllCategories();
-    Provider.of<ProductProvider>(context, listen: false)
-        .getAllFeaturedProducts();
-    Provider.of<CartProvider>(context, listen: false).getCartByUser();
+    if(isFirst) {
+      Provider.of<ProductProvider>(context, listen: false).getAllProducts();
+      Provider.of<ProductProvider>(context, listen: false).getAllCategories();
+      Provider.of<ProductProvider>(context, listen: false)
+          .getAllFeaturedProducts();
+      Provider.of<CartProvider>(context, listen: false).getCartByUser();
+    }
+    isFirst = false;
     super.didChangeDependencies();
   }
 

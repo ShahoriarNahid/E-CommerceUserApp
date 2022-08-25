@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -138,7 +139,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    // backgroundColor: Colors.blue.shade900
+                   // backgroundColor: Colors.blue.shade900
                   ),
                   onPressed: () {
                     authenticate();
