@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_user_batch06/models/product_model.dart';
+import 'package:ecom_user_batch06/utils/constants.dart';
+
+
 import '../models/cart_model.dart';
 import '../models/category_model.dart';
 import '../models/order_model.dart';
@@ -95,9 +98,18 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCities() =>
       _db.collection(collectionCities).snapshots();
 
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProduct)
           .where(productAvailable, isEqualTo: true)
+          .snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrdersByUser(String uid) =>
+      _db.collection(collectionOrder)
+          .where(orderUserIDKey, isEqualTo: uid)
+          //.orderBy(orderGrandTotalKey, descending: true)
+          .orderBy('$orderDateKey.timestamp', descending: true)
+          //.where(orderStatusKey, isEqualTo: OrderStatus.pending)
           .snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getCartByUser(String uid) =>
@@ -122,6 +134,26 @@ class DbHelper {
     return _db.collection(collectionUser)
         .doc(uid)
         .update({'address' : map});
+  }
+
+
+  static Future<bool> canUserRate(String uid, String pid) async {
+    final snapshot = await _db.collection(collectionOrder)
+        .where(orderUserIDKey, isEqualTo: uid)
+        .where(orderStatusKey, isEqualTo: OrderStatus.delivered)
+        .get();
+    if(snapshot.docs.isEmpty) return false;
+    bool tag = false;
+    for(var doc in snapshot.docs) {
+      final detailsSnapshot = await doc.reference.collection(collectionOrderDetails)
+          .where(cartProductId, isEqualTo: pid)
+          .get();
+      if(detailsSnapshot.docs.isNotEmpty) {
+        tag = true;
+        break;
+      }
+    }
+    return tag;
   }
 
 }

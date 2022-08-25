@@ -1,10 +1,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_user_batch06/providers/user_provider.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+
 import '../auth/auth_service.dart';
 import '../models/user_model.dart';
 import 'launcher_page.dart';
@@ -91,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    //backgroundColor: Colors.blue.shade900
+                  //  backgroundColor: Colors.blue.shade900
                   ),
                   onPressed: () {
                     authenticate();
@@ -127,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
               const Center(child: Text('OR', style: TextStyle(color: Colors.white, fontSize: 18),)),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    //backgroundColor: Colors.white
+                  //  backgroundColor: Colors.white
                 ),
                 onPressed: () {
                   AuthService.signInWithGoogle().then((credential) async {

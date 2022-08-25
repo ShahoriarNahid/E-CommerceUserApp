@@ -1,9 +1,12 @@
+
+
+
 import 'package:ecom_user_batch06/models/address_model.dart';
 
 import 'date_model.dart';
 
 const String orderIDKey = 'orderId';
- const String userIDKey = 'userId';
+ const String orderUserIDKey = 'userId';
  const String orderDateKey = 'orderDate';
  const String orderStatusKey = 'orderStatus';
  const String orderPaymentMethodKey = 'paymentMethod';
@@ -35,7 +38,7 @@ class OrderModel{
   Map<String, dynamic> toMap(){
     return <String, dynamic> {
       orderIDKey : orderId,
-      userIDKey : userId,
+      orderUserIDKey : userId,
       orderDateKey: orderDate.toMap(),
       orderStatusKey: orderStatus,
       orderPaymentMethodKey : paymentMethod,
@@ -50,7 +53,7 @@ class OrderModel{
   factory OrderModel.fromMap(Map<String, dynamic> map){
     return OrderModel(
       orderId: map[orderIDKey],
-      userId: map[userIDKey],
+      userId: map[orderUserIDKey],
       orderDate: DateModel.fromMap(map[orderDateKey]),
       orderStatus: map[orderStatusKey],
       paymentMethod: map[orderPaymentMethodKey],

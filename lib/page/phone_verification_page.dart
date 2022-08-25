@@ -1,6 +1,6 @@
-
 import 'package:ecom_user_batch06/auth/auth_service.dart';
 import 'package:ecom_user_batch06/utils/helper_functions.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

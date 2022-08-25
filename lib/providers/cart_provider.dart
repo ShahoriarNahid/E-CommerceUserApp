@@ -34,7 +34,9 @@ class CartProvider extends ChangeNotifier {
     cartModel.salePrice * cartModel.quantity;
 
    increaseQuantity(CartModel cartModel) async {
-    await _updateCartQuantity(cartModel.productId!, cartModel.quantity + 1);
+    if(cartModel.quantity < cartModel.stock) {
+      await _updateCartQuantity(cartModel.productId!, cartModel.quantity + 1);
+    }
   }
 
    decreaseQuantity(CartModel cartModel) async {

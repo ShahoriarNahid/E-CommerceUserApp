@@ -52,12 +52,12 @@ class MyApp extends StatelessWidget {
         ProductPage.routeName: (_) => ProductPage(),
         ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
         OrderPage.routeName: (_) => const OrderPage(),
-        CartPage.routeName: (_) => CartPage(),
         PhoneVerificationPage.routeName: (_) => PhoneVerificationPage(),
+        RegistrationPage.routeName: (_) => RegistrationPage(),
+        CartPage.routeName: (_) => CartPage(),
         UserAddressPage.routeName: (_) => UserAddressPage(),
         CheckoutPage.routeName: (_) => CheckoutPage(),
         OrderSuccessfulPage.routeName: (_) => OrderSuccessfulPage(),
-        RegistrationPage.routeName: (_) => RegistrationPage(),
       },
     );
   }

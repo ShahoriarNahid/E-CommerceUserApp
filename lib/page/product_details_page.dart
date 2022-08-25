@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_user_batch06/utils/helper_functions.dart';
+
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 import '../models/date_model.dart';
@@ -49,6 +52,19 @@ class ProductDetailsPage extends StatelessWidget {
                     title: const Text('Product Description'),
                     subtitle: Text(product.description ?? 'Not Available'),
                   ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      EasyLoading.show(status: 'Please wait');
+                      final status = await provider.canUserRate(pid);
+                      EasyLoading.dismiss();
+                      if(status) {
+                        showMsg(context, 'You can rate');
+                      } else {
+                        showMsg(context, 'You cannot rate');
+                      }
+                    },
+                    child: const Text('Rate this product'),
+                  )
                 ],
               );
             }

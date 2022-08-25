@@ -8,6 +8,7 @@ import 'package:ecom_user_batch06/providers/product_provider.dart';
 import 'package:ecom_user_batch06/providers/user_provider.dart';
 import 'package:ecom_user_batch06/utils/constants.dart';
 import 'package:ecom_user_batch06/utils/helper_functions.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -226,9 +227,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
     orderProvider.addOrder(orderModel, cartProvider.cartList)
     .then((_) async {
-      await cartProvider.clearAllCartItems();
       await Provider.of<ProductProvider>(context, listen: false)
         .updateCategoryProductCount(cartProvider.cartList);
+      await cartProvider.clearAllCartItems();
       EasyLoading.dismiss();
       Navigator.pushNamedAndRemoveUntil(
           context, OrderSuccessfulPage.routeName, ModalRoute.withName(ProductPage.routeName));

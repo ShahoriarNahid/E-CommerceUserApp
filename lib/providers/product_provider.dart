@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_user_batch06/auth/auth_service.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +26,9 @@ class ProductProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  Future<bool> canUserRate(String pid) =>
+    DbHelper.canUserRate(AuthService.user!.uid, pid);
 
   getAllProducts() {
     DbHelper.getAllProducts().listen((snapshot) {
