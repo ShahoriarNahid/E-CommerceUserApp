@@ -1,8 +1,8 @@
 
-import 'package:ecom_user_batch06/auth/auth_service.dart';
-import 'package:ecom_user_batch06/db/dbhelper.dart';
 import 'package:flutter/material.dart';
 
+import '../auth/auth_service.dart';
+import '../db/dbhelper.dart';
 import '../models/cart_model.dart';
 
 class CartProvider extends ChangeNotifier {

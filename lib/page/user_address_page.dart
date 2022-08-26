@@ -1,11 +1,11 @@
 
-import 'package:ecom_user_batch06/auth/auth_service.dart';
-import 'package:ecom_user_batch06/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
+import '../auth/auth_service.dart';
 import '../models/address_model.dart';
+import '../providers/user_provider.dart';
 
 class UserAddressPage extends StatefulWidget {
   static const String routeName = '/user_address';

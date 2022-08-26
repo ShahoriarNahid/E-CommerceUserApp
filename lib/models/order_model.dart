@@ -1,8 +1,7 @@
 
 
 
-import 'package:ecom_user_batch06/models/address_model.dart';
-
+import 'address_model.dart';
 import 'date_model.dart';
 
 const String orderIDKey = 'orderId';

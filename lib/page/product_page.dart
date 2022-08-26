@@ -1,15 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecom_user_batch06/providers/cart_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart_provider.dart';
 import '../providers/product_provider.dart';
-import '../utils/constants.dart';
+
 import '../widgets/main_drawer.dart';
 import '../widgets/product_item.dart';
 import 'cart_page.dart';
-import 'product_details_page.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class ProductPage extends StatefulWidget {
   static const String routeName = '/product';
@@ -25,7 +26,22 @@ class _ProductPageState extends State<ProductPage> {
   bool isFirst = true;
 
   @override
+  void initState() {
+
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+
     if(isFirst) {
       Provider.of<ProductProvider>(context, listen: false).getAllProducts();
       Provider.of<ProductProvider>(context, listen: false).getAllCategories();

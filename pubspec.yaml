@@ -62,6 +62,9 @@ dev_dependencies:
   google_sign_in:
   carousel_slider:
   flutter_rating_bar:
+  firebase_messaging:
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

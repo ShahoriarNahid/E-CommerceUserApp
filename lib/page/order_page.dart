@@ -1,9 +1,10 @@
 
-import 'package:ecom_user_batch06/providers/order_provider.dart';
-import 'package:ecom_user_batch06/utils/constants.dart';
-import 'package:ecom_user_batch06/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/order_provider.dart';
+import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 
 class OrderPage extends StatelessWidget {
   static const String routeName = '/order';

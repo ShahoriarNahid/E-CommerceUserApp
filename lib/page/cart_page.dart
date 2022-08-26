@@ -1,9 +1,9 @@
 
-import 'package:ecom_user_batch06/providers/cart_provider.dart';
-import 'package:ecom_user_batch06/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart_provider.dart';
+import '../utils/constants.dart';
 import 'checkout_page.dart';
 import 'user_address_page.dart';
 

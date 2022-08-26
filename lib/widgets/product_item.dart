@@ -1,11 +1,10 @@
-
-import 'package:ecom_user_batch06/models/product_model.dart';
-import 'package:ecom_user_batch06/page/product_details_page.dart';
-import 'package:ecom_user_batch06/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/cart_model.dart';
+import '../models/product_model.dart';
+import '../page/product_details_page.dart';
 import '../providers/cart_provider.dart';
+import '../utils/constants.dart';
 
 class ProductItem extends StatefulWidget {
   final ProductModel productModel;
@@ -49,7 +48,7 @@ class _ProductItemState extends State<ProductItem> {
                   ),
                 ),
                 Text(
-                  '$currencySymbol${widget.productModel.salesPrice}',
+                  '$currencySymbol${widget.productModel. salesPrice}',
                   style:
                       const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),

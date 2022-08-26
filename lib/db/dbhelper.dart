@@ -1,16 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom_user_batch06/models/product_model.dart';
-import 'package:ecom_user_batch06/utils/constants.dart';
 
 
 import '../models/cart_model.dart';
 import '../models/category_model.dart';
 import '../models/order_model.dart';
+import '../models/product_model.dart';
+import '../models/rating_model.dart';
 import '../models/user_model.dart';
+import '../utils/constants.dart';
 
 class DbHelper {
   static const String collectionCategory = 'Categories';
   static const String collectionProduct = 'Products';
+  static const String collectionRating = 'Ratings';
+  static const String collectionComment = 'Comments';
   static const String collectionUser = 'Users';
   static const String collectionCart = 'Cart';
   static const String collectionOrder = 'Order';
@@ -77,6 +80,13 @@ class DbHelper {
           .doc(pid)
           .update({cartProductQuantity : quantity});
 
+  static Future<void> updateProduct(String pid, Map<String, dynamic> map) {
+    return _db.collection(collectionProduct)
+        .doc(pid)
+        .update(map);
+
+  }
+
   static Future<bool> doesUserExist(String uid) async {
     final snapshot = await _db.collection(collectionUser)
         .doc(uid).get();
@@ -130,6 +140,12 @@ class DbHelper {
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserByUid(String uid) =>
       _db.collection(collectionUser).doc(uid).snapshots();
 
+  static Future<QuerySnapshot<Map<String, dynamic>>> getAllRatingsByProduct(String pid) =>
+      _db.collection(collectionProduct)
+          .doc(pid)
+          .collection(collectionRating)
+          .get();
+
   static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
     return _db.collection(collectionUser)
         .doc(uid)
@@ -154,6 +170,14 @@ class DbHelper {
       }
     }
     return tag;
+  }
+
+  static Future<void> addRating(RatingModel ratingModel) {
+    return _db.collection(collectionProduct)
+        .doc(ratingModel.productId)
+        .collection(collectionRating)
+        .doc(ratingModel.userId)
+        .set(ratingModel.toMap());
   }
 
 }

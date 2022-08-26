@@ -139,7 +139,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                   // backgroundColor: Colors.blue.shade900
+                    primary: Colors.blue.shade900
                   ),
                   onPressed: () {
                     authenticate();
