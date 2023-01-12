@@ -39,6 +39,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     orderProvider.getOrderConstants();
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,22 +53,36 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: ListView(
               padding: const EdgeInsets.all(8),
               children: [
-                Text('Product Info', style: Theme.of(context).textTheme.headline6,),
-                const SizedBox(height: 10,),
+                Text(
+                  'Product Info',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Card(
                   elevation: 5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: cartProvider.cartList.map((cartM) =>
-                        ListTile(
-                          title: Text(cartM.productName!),
-                          trailing: Text('${cartM.quantity}x$currencySymbol${cartM.salePrice}'),
-                        )).toList(),
+                    children: cartProvider.cartList
+                        .map((cartM) => ListTile(
+                              title: Text(cartM.productName!),
+                              trailing: Text(
+                                  '${cartM.quantity}x$currencySymbol${cartM.salePrice}'),
+                            ))
+                        .toList(),
                   ),
                 ),
-                const SizedBox(height: 10,),
-                Text('Payment Info', style: Theme.of(context).textTheme.headline6,),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Payment Info',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -79,49 +94,68 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Subtotal'),
-                            Text('$currencySymbol${cartProvider.getCartSubTotal()}'),
+                            Text(
+                                '$currencySymbol${cartProvider.getCartSubTotal()}'),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Delivery Charge'),
-                            Text('$currencySymbol${orderProvider.orderConstantsModel.deliveryCharge}'),
+                            Text(
+                                '$currencySymbol${orderProvider.orderConstantsModel.deliveryCharge}'),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Discount(${orderProvider.orderConstantsModel.discount}%)'),
-                            Text('-$currencySymbol${orderProvider.getDiscountAmount(cartProvider.getCartSubTotal())}'),
+                            Text(
+                                'Discount(${orderProvider.orderConstantsModel.discount}%)'),
+                            Text(
+                                '-$currencySymbol${orderProvider.getDiscountAmount(cartProvider.getCartSubTotal())}'),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('VAT(${orderProvider.orderConstantsModel.vat}%)'),
-                            Text('$currencySymbol${orderProvider.getVatAmount(cartProvider.getCartSubTotal())}'),
+                            Text(
+                                'VAT(${orderProvider.orderConstantsModel.vat}%)'),
+                            Text(
+                                '$currencySymbol${orderProvider.getVatAmount(cartProvider.getCartSubTotal())}'),
                           ],
                         ),
-                        const Divider(height: 1.5, color: Colors.black,),
+                        const Divider(
+                          height: 1.5,
+                          color: Colors.black,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Grand Total'),
-                            Text('$currencySymbol${orderProvider.getGrandTotal(cartProvider.getCartSubTotal())}', style: Theme.of(context).textTheme.headline6,),
+                            Text(
+                              '$currencySymbol${orderProvider.getGrandTotal(cartProvider.getCartSubTotal())}',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
-                Text('Delivery Address', style: Theme.of(context).textTheme.headline6,),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Delivery Address',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   stream: userProvider.getUserByUid(AuthService.user!.uid),
                   builder: (context, snapshot) {
-                    if(snapshot.hasData) {
+                    if (snapshot.hasData) {
                       final userM = UserModel.fromMap(snapshot.data!.data()!);
                       userProvider.userModel = userM;
                       return Card(
@@ -131,12 +165,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(userM.address == null ? 'No address set yet' :
-                              '${userM.address!.streetAddress} \n'
-                                  '${userM.address!.area}, ${userM.address!.city}\n'
-                                  '${userM.address!.zipCode}'),
+                              Text(userM.address == null
+                                  ? 'No address set yet'
+                                  : '${userM.address!.streetAddress} \n'
+                                      '${userM.address!.area}, ${userM.address!.city}\n'
+                                      '${userM.address!.zipCode}'),
                               ElevatedButton(
-                                onPressed: () => Navigator.pushNamed(context, UserAddressPage.routeName),
+                                onPressed: () => Navigator.pushNamed(
+                                    context, UserAddressPage.routeName),
                                 child: const Text('Change'),
                               ),
                             ],
@@ -144,15 +180,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ),
                       );
                     }
-                    if(snapshot.hasError) {
+                    if (snapshot.hasError) {
                       return const Text('Failed to fetch user data');
                     }
                     return const Text('Fetching user data...');
                   },
                 ),
-                const SizedBox(height: 10,),
-                Text('Payment Method', style: Theme.of(context).textTheme.headline6,),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Payment Method',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -169,7 +212,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           },
                         ),
                         const Text(PaymentMethod.cod),
-                        const SizedBox(width: 15,),
+                        const SizedBox(
+                          width: 15,
+                        ),
                         Radio<String>(
                           value: PaymentMethod.online,
                           groupValue: paymentMethodGroupValue,
@@ -197,7 +242,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   void _saveOrder() {
-    if(userProvider.userModel?.address == null) {
+    if (userProvider.userModel?.address == null) {
       showMsg(context, 'Please provide a delivery address');
       return;
     }
@@ -223,17 +268,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
         zipCode: userProvider.userModel!.address!.zipCode,
       ),
     );
-    orderProvider.addOrder(orderModel, cartProvider.cartList)
-    .then((_) async {
+    orderProvider.addOrder(orderModel, cartProvider.cartList).then((_) async {
       await Provider.of<ProductProvider>(context, listen: false)
-        .updateCategoryProductCount(cartProvider.cartList);
+          .updateCategoryProductCount(cartProvider.cartList);
       await cartProvider.clearAllCartItems();
       EasyLoading.dismiss();
-      Navigator.pushNamedAndRemoveUntil(
-          context, OrderSuccessfulPage.routeName, ModalRoute.withName(ProductPage.routeName));
-    })
-        .catchError((error) {
-          EasyLoading.dismiss();
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(context, OrderSuccessfulPage.routeName,
+          ModalRoute.withName(ProductPage.routeName));
+    }).catchError((error) {
+      EasyLoading.dismiss();
     });
   }
 }

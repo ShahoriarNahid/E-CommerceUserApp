@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
 import '../utils/constants.dart';
 import 'checkout_page.dart';
-import 'user_address_page.dart';
 
 class CartPage extends StatelessWidget {
   static const String routeName = '/cart';
@@ -27,9 +25,7 @@ class CartPage extends StatelessWidget {
                   final cartM = provider.cartList[index];
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        cartM.imageUrl!
-                      ),
+                      backgroundImage: NetworkImage(cartM.imageUrl!),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,14 +36,23 @@ class CartPage extends StatelessWidget {
                           //mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: Icon(Icons.remove_circle_outline, size: 30,),
+                              icon: Icon(
+                                Icons.remove_circle_outline,
+                                size: 30,
+                              ),
                               onPressed: () {
                                 provider.decreaseQuantity(cartM);
                               },
                             ),
-                            Text('${cartM.quantity}', style: const TextStyle(fontSize: 17),),
+                            Text(
+                              '${cartM.quantity}',
+                              style: const TextStyle(fontSize: 17),
+                            ),
                             IconButton(
-                              icon: Icon(Icons.add_circle_outline, size: 30,),
+                              icon: Icon(
+                                Icons.add_circle_outline,
+                                size: 30,
+                              ),
                               onPressed: () {
                                 provider.increaseQuantity(cartM);
                               },
@@ -64,7 +69,8 @@ class CartPage extends StatelessWidget {
                       ],
                     ),
                     title: Text(cartM.productName!),
-                    trailing: Text('$currencySymbol${provider.unitPriceWithQuantity(cartM)}'),
+                    trailing: Text(
+                        '$currencySymbol${provider.unitPriceWithQuantity(cartM)}'),
                   );
                 },
               ),
@@ -78,10 +84,16 @@ class CartPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Subtotal: $currencySymbol${provider.getCartSubTotal()}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                      Text(
+                        'Subtotal: $currencySymbol${provider.getCartSubTotal()}',
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                       TextButton(
-                        onPressed: provider.totalItemsInCart == 0 ? null
-                            : () => Navigator.pushNamed(context, CheckoutPage.routeName),
+                        onPressed: provider.totalItemsInCart == 0
+                            ? null
+                            : () => Navigator.pushNamed(
+                                context, CheckoutPage.routeName),
                         child: const Text('CHECKOUT'),
                       ),
                     ],

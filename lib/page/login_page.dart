@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     fillColor: Colors.white,
                     filled: true),
                 validator: (value) {
-                  if(value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return 'This field must not be empty';
                   }
                   return null;
@@ -72,8 +71,9 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: IconButton(
-                    icon: Icon(
-                        isObscureText ? Icons.visibility_off : Icons.visibility),
+                    icon: Icon(isObscureText
+                        ? Icons.visibility_off
+                        : Icons.visibility),
                     onPressed: () => setState(() {
                       isObscureText = !isObscureText;
                     }),
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if(value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return 'This field must not be empty';
                   }
                   return null;
@@ -94,8 +94,7 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue.shade900
-                  ),
+                      backgroundColor: Colors.blue.shade900),
                   onPressed: () {
                     authenticate();
                   },
@@ -107,10 +106,11 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const Text('Forgot Password?'),
                   TextButton(
-                    onPressed: () {
-
-                    },
-                    child: const Text('Click Here', style: const TextStyle(color: Colors.white),),
+                    onPressed: () {},
+                    child: const Text(
+                      'Click Here',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   )
                 ],
               ),
@@ -120,42 +120,63 @@ class _LoginPageState extends State<LoginPage> {
                   const Text('New User?'),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, PhoneVerificationPage.routeName);
+                      Navigator.pushNamed(
+                          context, PhoneVerificationPage.routeName);
                     },
-                    child: const Text('REGISTER', style: const TextStyle(color: Colors.white),),
+                    child: const Text(
+                      'REGISTER',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   )
                 ],
               ),
-              const SizedBox(height: 20,),
-              const Center(child: Text('OR', style: TextStyle(color: Colors.white, fontSize: 18),)),
+              const SizedBox(
+                height: 20,
+              ),
+              const Center(
+                  child: Text(
+                'OR',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              )),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.white
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                 onPressed: () {
                   AuthService.signInWithGoogle().then((credential) async {
-                    if(credential.user != null) {
-                      if(!await Provider.of<UserProvider>(context, listen: false)
+                    if (credential.user != null) {
+                      if (!await Provider.of<UserProvider>(context,
+                              listen: false)
                           .doesUserExist(credential.user!.uid)) {
-                        EasyLoading.show(status: 'Please wait', dismissOnTap: false);
+                        EasyLoading.show(
+                            status: 'Please wait', dismissOnTap: false);
                         final userModel = UserModel(
                           uid: credential.user!.uid,
                           email: credential.user!.email!,
                           name: credential.user!.displayName,
-                          userCreationTime: Timestamp.fromDate(credential.user!.metadata.creationTime!),
+                          userCreationTime: Timestamp.fromDate(
+                              credential.user!.metadata.creationTime!),
                         );
                         await Provider.of<UserProvider>(context, listen: false)
-                        .addUser(userModel);
+                            .addUser(userModel);
                         EasyLoading.dismiss();
                       }
-                      Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushReplacementNamed(
+                          context, LauncherPage.routeName);
                     }
                   });
                 },
-                child: const Text('SIGN IN WITH GOOGLE', style: const TextStyle(color: Colors.black),),
+                child: const Text(
+                  'SIGN IN WITH GOOGLE',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
-              const SizedBox(height: 10,),
-              Text(errMsg, style: TextStyle(color: Theme.of(context).errorColor),)
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                errMsg,
+                style: TextStyle(color: Theme.of(context).errorColor),
+              )
             ],
           ),
         ),
@@ -164,11 +185,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   authenticate() async {
-    if(formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       try {
-        final status = await AuthService.login(emailController.text, passController.text);
-        if(status) {
-          if(!mounted) return;
+        final status =
+            await AuthService.login(emailController.text, passController.text);
+        if (status) {
+          if (!mounted) return;
           Navigator.pushReplacementNamed(context, LauncherPage.routeName);
         } else {
           await AuthService.logout();

@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -28,6 +27,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     otpController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,8 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             duration: const Duration(seconds: 1),
             firstChild: phoneVerificationSection(),
             secondChild: otpSection(),
-            crossFadeState: isFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            crossFadeState:
+                isFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
           ),
         ),
       ),
@@ -47,39 +48,44 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
   Column phoneVerificationSection() {
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: phoneController,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: 'Enter Mobile Number',
-              filled: true,
-            ),
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextField(
+          controller: phoneController,
+          keyboardType: TextInputType.phone,
+          decoration: InputDecoration(
+            labelText: 'Enter Mobile Number',
+            filled: true,
           ),
-          ElevatedButton(
-            onPressed: () {
-              if(phoneController.text.isEmpty) {
-                showMsg(context, 'Invalid Phone Number');
-                return;
-              }
-              setState(() {
-                isFirst = false;
-              });
-              _verifyPhone();
-            },
-            child: const Text('SUBMIT'),
-          )
-        ],
-      );
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (phoneController.text.isEmpty) {
+              showMsg(context, 'Invalid Phone Number');
+              return;
+            }
+            setState(() {
+              isFirst = false;
+            });
+            _verifyPhone();
+          },
+          child: const Text('SUBMIT'),
+        )
+      ],
+    );
   }
 
   Column otpSection() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(phoneController.text, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-        const SizedBox(height: 20,),
+        Text(
+          phoneController.text,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         PinCodeTextField(
           appContext: context,
           length: 6,
@@ -98,13 +104,12 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           //errorAnimationController: errorController,
           controller: otpController,
           onChanged: (value) {
-            if(value.length == 6) {
+            if (value.length == 6) {
               EasyLoading.show(status: 'Please Wait');
               sendOtp();
             }
           },
         ),
-
       ],
     );
   }
@@ -120,22 +125,23 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       codeSent: (String verificationId, int? resendToken) {
         vId = verificationId;
       },
-      codeAutoRetrievalTimeout: (String verificationId) {
-
-      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
   void sendOtp() {
-    PhoneAuthCredential credential = PhoneAuthProvider
-        .credential(verificationId: vId, smsCode: otpController.text);
-    FirebaseAuth.instance.signInWithCredential(credential)
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: vId, smsCode: otpController.text);
+    FirebaseAuth.instance
+        .signInWithCredential(credential)
         .then((credentialUser) {
-          if(credentialUser != null) {
-            EasyLoading.dismiss();
-            AuthService.logout();
-            Navigator.pushReplacementNamed(context, RegistrationPage.routeName, arguments: phoneController.text);
-          }
+      // ignore: unnecessary_null_comparison
+      if (credentialUser != null) {
+        EasyLoading.dismiss();
+        AuthService.logout();
+        Navigator.pushReplacementNamed(context, RegistrationPage.routeName,
+            arguments: phoneController.text);
+      }
     });
   }
 }
