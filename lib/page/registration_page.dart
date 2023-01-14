@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,6 +10,7 @@ import '../auth/auth_service.dart';
 import '../models/user_model.dart';
 import '../providers/user_provider.dart';
 import 'launcher_page.dart';
+import 'phone_verification_page.dart';
 
 class RegistrationPage extends StatefulWidget {
   static const String routeName = '/registration';
@@ -62,7 +64,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     fillColor: Colors.white,
                     filled: true),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if(value == null || value.isEmpty) {
                     return 'This field must not be empty';
                   }
                   return null;
@@ -81,7 +83,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     fillColor: Colors.white,
                     filled: true),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if(value == null || value.isEmpty) {
                     return 'This field must not be empty';
                   }
                   return null;
@@ -99,7 +101,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     fillColor: Colors.white,
                     filled: true),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if(value == null || value.isEmpty) {
                     return 'This field must not be empty';
                   }
                   return null;
@@ -115,9 +117,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: IconButton(
-                    icon: Icon(isObscureText
-                        ? Icons.visibility_off
-                        : Icons.visibility),
+                    icon: Icon(
+                        isObscureText ? Icons.visibility_off : Icons.visibility),
                     onPressed: () => setState(() {
                       isObscureText = !isObscureText;
                     }),
@@ -126,7 +127,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   fillColor: Colors.white,
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if(value == null || value.isEmpty) {
                     return 'This field must not be empty';
                   }
                   return null;
@@ -138,20 +139,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade900),
+                    backgroundColor: Colors.blue.shade900
+                  ),
                   onPressed: () {
                     authenticate();
                   },
                   child: const Text('REGISTER'),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                errMsg,
-                style: TextStyle(color: Theme.of(context).errorColor),
-              )
+
+              const SizedBox(height: 20,),
+
+              Text(errMsg, style: TextStyle(color: Theme.of(context).errorColor),)
             ],
           ),
         ),
@@ -160,28 +159,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   authenticate() async {
-    if (formKey.currentState!.validate()) {
+    if(formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Please Wait', dismissOnTap: false);
       try {
-        if (await AuthService.register(
-            emailController.text, passController.text)) {
+        if(await AuthService.register(emailController.text, passController.text)) {
           final userModel = UserModel(
             uid: AuthService.user!.uid,
             email: AuthService.user!.email!,
             name: nameController.text,
             mobile: phoneController.text,
-            userCreationTime:
-                Timestamp.fromDate(AuthService.user!.metadata.creationTime!),
+            userCreationTime: Timestamp.fromDate(AuthService.user!.metadata.creationTime!),
           );
-          if (!mounted) return;
+          if(!mounted) return;
           Provider.of<UserProvider>(context, listen: false)
-              .addUser(userModel)
-              .then((value) {
-            EasyLoading.dismiss();
-            Navigator.pushNamedAndRemoveUntil(
-                context, LauncherPage.routeName, (route) => false);
+            .addUser(userModel).then((value) {
+              EasyLoading.dismiss();
+              Navigator.pushNamedAndRemoveUntil(context, LauncherPage.routeName, (route) => false);
           });
-        }
+
+        };
       } on FirebaseAuthException catch (e) {
         setState(() {
           errMsg = e.message!;

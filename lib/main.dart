@@ -1,41 +1,50 @@
-import 'package:ecom_user_batch06/page/cart_page.dart';
-import 'package:ecom_user_batch06/page/checkout_page.dart';
-import 'package:ecom_user_batch06/page/launcher_page.dart';
-import 'package:ecom_user_batch06/page/order_successful_page.dart';
-import 'package:ecom_user_batch06/page/phone_verification_page.dart';
-import 'package:ecom_user_batch06/page/registration_page.dart';
-import 'package:ecom_user_batch06/page/user_address_page.dart';
 import 'package:ecom_user_batch06/providers/cart_provider.dart';
-import 'package:ecom_user_batch06/providers/product_provider.dart';
-import 'package:ecom_user_batch06/providers/user_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
+import 'page/cart_page.dart';
+import 'page/checkout_page.dart';
+import 'page/launcher_page.dart';
 import 'page/login_page.dart';
 import 'page/order_page.dart';
+import 'page/order_successful_page.dart';
+import 'page/phone_verification_page.dart';
 import 'page/product_details_page.dart';
 import 'page/product_page.dart';
+import 'page/registration_page.dart';
+import 'page/user_address_page.dart';
 import 'providers/order_provider.dart';
+import 'providers/product_provider.dart';
+import 'providers/user_provider.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print('Handling a background message: ${message.notification?.title}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => ProductProvider()),
-      ChangeNotifierProvider(create: (_) => OrderProvider()),
-      ChangeNotifierProvider(create: (_) => UserProvider()),
-      ChangeNotifierProvider(create: (_) => CartProvider()),
+      ChangeNotifierProvider(create: (context) => ProductProvider()),
+      ChangeNotifierProvider(create: (context) => OrderProvider()),
+      ChangeNotifierProvider(create: (context) => UserProvider()),
+      ChangeNotifierProvider(create: (context) => CartProvider()),
     ],
     child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

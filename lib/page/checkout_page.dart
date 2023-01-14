@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_user_batch06/page/product_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+
 import '../auth/auth_service.dart';
 import '../models/address_model.dart';
 import '../models/date_model.dart';
@@ -14,7 +17,6 @@ import '../providers/user_provider.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 import 'order_successful_page.dart';
-import 'product_page.dart';
 import 'user_address_page.dart';
 
 class CheckoutPage extends StatefulWidget {

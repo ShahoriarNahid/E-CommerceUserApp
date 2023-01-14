@@ -1,16 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:ecom_user_batch6/db/dbhelper.dart';
+import 'package:ecom_user_batch6/providers/cart_provider.dart';
+import 'package:ecom_user_batch6/providers/order_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
 import '../providers/product_provider.dart';
-
+import '../utils/constants.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/product_item.dart';
 import 'cart_page.dart';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'product_details_page.dart';
 
 class ProductPage extends StatefulWidget {
   static const String routeName = '/product';

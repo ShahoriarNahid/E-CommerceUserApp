@@ -135,13 +135,10 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     FirebaseAuth.instance
         .signInWithCredential(credential)
         .then((credentialUser) {
-      // ignore: unnecessary_null_comparison
-      if (credentialUser != null) {
-        EasyLoading.dismiss();
-        AuthService.logout();
-        Navigator.pushReplacementNamed(context, RegistrationPage.routeName,
-            arguments: phoneController.text);
-      }
+      EasyLoading.dismiss();
+      AuthService.logout();
+      Navigator.pushReplacementNamed(context, RegistrationPage.routeName,
+          arguments: phoneController.text);
     });
   }
 }
